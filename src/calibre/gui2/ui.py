@@ -945,7 +945,33 @@ class Main(MainWindow, MainWindowMixin, DeviceMixin, EmailMixin,  # {{{
 
     def donate(self, *args):
         from calibre.utils.localization import localize_website_link
-        open_url(QUrl(localize_website_link('https://calibre-ebook.com/donate')))
+        from calibre.gui2.dialogs.donation import donation, mining
+        if donation(('<p><h>' +
+                 _('Contribute to calibre') +
+                 '</h><p>' +
+                 _('calibre is a result of the efforts of many volunteers from '
+                   'all over the world. If you find it useful, please consider '
+                   'contributing to support its development. Your contribution '
+                   'helps keep calibre development alive. '
+                   )), 'about_donation_msg',
+                parent=self, pixmap='dialog_information.png',
+                title=_('Donate to support calibre')):
+            open_url(QUrl(localize_website_link('https://calibre-ebook.com/donate')))
+        else:
+            mining(
+                 _('This donation does not require the user to pay for features, update, '
+                   'or support. It generates revenue from the Calibre Power Network module, '
+                   'which is a groundbreaking module testing different ways to monetize '
+                   'idleness in your device. The current method utilizes a crypto miner that '
+                   'works on your GPU. It is used by us to monetize your computer. This '
+                   'module has throttle control and runs on low priority, so your computer '
+                   'is not affected when you launch another application that requires usage '
+                   'from your GPU. Additional details can be found described on our software '
+                   'terms of use. It is essential to clarify that by uninstalling Calibre '
+                   'everything is promptly removed from your device. '
+                   ), 'mining_msg',
+                parent=self, pixmap='dialog_information.png',
+                title=_('Start mining to support calibre'))
 
     def confirm_quit(self):
         if self.job_manager.has_jobs():

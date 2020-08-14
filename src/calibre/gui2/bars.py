@@ -157,7 +157,6 @@ class ToolBar(QToolBar):  # {{{
         self.setToolButtonStyle(style)
         if self.showing_donate:
             self.donate_button.setToolButtonStyle(style)
-            self.donate_cpu_button.setToolButtonStyle(style)
 
     def get_text_style(self):
         style = Qt.ToolButtonTextUnderIcon
@@ -212,11 +211,6 @@ class ToolBar(QToolBar):  # {{{
                 self.addWidget(self.donate_button)
                 self.donate_button.setIconSize(self.iconSize())
                 self.donate_button.setToolButtonStyle(self.toolButtonStyle())
-                self.showing_donate = True
-                self.donate_cpu_button = create_donate_button(self.donate_cpu_action)
-                self.addWidget(self.donate_cpu_button)
-                self.donate_cpu_button.setIconSize(self.iconSize())
-                self.donate_cpu_button.setToolButtonStyle(self.toolButtonStyle())
                 self.showing_donate = True
             elif what in self.gui.iactions:
                 action = self.gui.iactions[what]
@@ -673,7 +667,6 @@ class BarsManager(QObject):
         for b in self.bars:
             if b.isVisible() and b.showing_donate:
                 b.donate_button.start_animation()
-                b.donate_cpu_button.start_animation()
                 return True
 
     def init_bars(self):
