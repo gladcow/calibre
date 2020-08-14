@@ -678,6 +678,14 @@ class Main(MainWindow):
                 self.donate_button = b = ThrobbingButton(self)
                 b.clicked.connect(open_donate)
                 b.setAutoRaise(True)
+                b.setToolTip(_('Donate to support calibre development test'))
+                if animate:
+                    QTimer.singleShot(10, b.start_animation)
+                bar.addWidget(b)
+            elif ac == 'donate_cpu':
+                self.donate_button = b = ThrobbingButton(self)
+                b.clicked.connect(open_donate)
+                b.setAutoRaise(True)
                 b.setToolTip(_('Donate to support calibre development'))
                 if animate:
                     QTimer.singleShot(10, b.start_animation)

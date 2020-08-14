@@ -157,7 +157,7 @@ def default_cover_icons(cols=5):
     for x in 'user_profile plus minus series sync tags default_cover'.split():
         yield x + '.png'
         count += 1
-    extra = 'search donate cover_flow reader publisher back forward'.split()
+    extra = 'search donate donate_cpu cover_flow reader publisher back forward'.split()
     while count < 15 or count % cols != 0:
         yield extra[0] + '.png'
         del extra[0]

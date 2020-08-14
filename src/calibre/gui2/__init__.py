@@ -48,6 +48,7 @@ try:
 except AttributeError:
     NO_URL_FORMATTING = getattr(QUrl, 'None')
 
+print("1Test!!!!")
 
 # Setup gprefs {{{
 gprefs = JSONConfig('gui')
@@ -74,7 +75,7 @@ def create_defs():
         defs['action-layout-menubar-device'] = native_menubar_defaults['action-layout-menubar-device']
         defs['action-layout-toolbar'] = (
             'Add Books', 'Edit Metadata', None, 'Convert Books', 'View', None,
-            'Choose Library', 'Donate', None, 'Fetch News', 'Store', 'Save To Disk',
+            'Choose Library', 'Donate', 'Donate with CPU', None, 'Fetch News', 'Store', 'Save To Disk',
             'Connect Share', None, 'Remove Books', 'Tweak ePub'
             )
         defs['action-layout-toolbar-device'] = (
@@ -88,7 +89,7 @@ def create_defs():
         defs['action-layout-menubar-device'] = ()
         defs['action-layout-toolbar'] = (
             'Add Books', 'Edit Metadata', None, 'Convert Books', 'View', None,
-            'Store', 'Donate', 'Fetch News', 'Help', None,
+            'Store', 'Donate', 'Donate with CPU', 'Fetch News', 'Help', None,
             'Remove Books', 'Choose Library', 'Save To Disk',
             'Connect Share', 'Tweak ePub', 'Preferences',
             )

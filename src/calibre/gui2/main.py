@@ -227,7 +227,7 @@ class GuiRunner(QObject):
 
     def start_gui(self, db):
         from calibre.gui2.ui import Main
-        self.timed_print('Constructing main UI...')
+        self.timed_print('Constructing main UI 111...')
         main = self.main = Main(self.opts, gui_debug=self.gui_debug)
         if self.splash_screen is not None:
             self.splash_screen.show_message(_('Initializing user interface...'))

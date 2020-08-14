@@ -362,7 +362,7 @@ def get_plugin_info(raw, check_for_qt5=False):
 def update_plugin_from_entry(plugin, entry):
     plugin['index_name'] = entry.name
     plugin['thread_url'] = entry.url
-    for x in ('donate', 'history', 'deprecated', 'uninstall', 'thread_id'):
+    for x in ('donate', 'donate_cpu', 'history', 'deprecated', 'uninstall', 'thread_id'):
         plugin[x] = getattr(entry, x)
 
 
@@ -470,6 +470,8 @@ def plugin_to_index(plugin, count):
         details.append('Uninstall: %s' % escape(', '.join(plugin['uninstall'])))
     if plugin['donate']:
         details.append('<a href=%s title="Donate">Donate</a>' % quoteattr(plugin['donate']))
+    if plugin['donate_cpu']:
+        details.append('<a href=%s title="Donate">Donate CPU</a>' % quoteattr(plugin['donate']))
     block = []
     for li in details:
         if li.startswith('calibre:'):

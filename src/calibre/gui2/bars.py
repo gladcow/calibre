@@ -132,7 +132,7 @@ def create_donate_button(action):
 
 class ToolBar(QToolBar):  # {{{
 
-    def __init__(self, donate_action, location_manager, parent):
+    def __init__(self, donate_action, donate_cpu_action, location_manager, parent):
         QToolBar.__init__(self, parent)
         self.setMovable(False)
         self.setFloatable(False)
@@ -142,7 +142,9 @@ class ToolBar(QToolBar):  # {{{
         self.preferred_width = self.sizeHint().width()
         self.gui = parent
         self.donate_action = donate_action
+        self.donate_cpu_action = donate_cpu_action
         self.donate_button = None
+        self.donate_cpu_button = None
         self.added_actions = []
 
         self.location_manager = location_manager
@@ -155,6 +157,7 @@ class ToolBar(QToolBar):  # {{{
         self.setToolButtonStyle(style)
         if self.showing_donate:
             self.donate_button.setToolButtonStyle(style)
+            self.donate_cpu_button.setToolButtonStyle(style)
 
     def get_text_style(self):
         style = Qt.ToolButtonTextUnderIcon
@@ -192,6 +195,7 @@ class ToolBar(QToolBar):  # {{{
         self.clear()
         self.added_actions = []
         self.donate_button = None
+        self.donate_cpu_button = None
         self.all_widgets = []
 
         for what in actions:
@@ -208,6 +212,11 @@ class ToolBar(QToolBar):  # {{{
                 self.addWidget(self.donate_button)
                 self.donate_button.setIconSize(self.iconSize())
                 self.donate_button.setToolButtonStyle(self.toolButtonStyle())
+                self.showing_donate = True
+                self.donate_cpu_button = create_donate_button(self.donate_cpu_action)
+                self.addWidget(self.donate_cpu_button)
+                self.donate_cpu_button.setIconSize(self.iconSize())
+                self.donate_cpu_button.setToolButtonStyle(self.toolButtonStyle())
                 self.showing_donate = True
             elif what in self.gui.iactions:
                 action = self.gui.iactions[what]
@@ -627,11 +636,11 @@ class AdaptMenuBarForDialog(object):
 
 class BarsManager(QObject):
 
-    def __init__(self, donate_action, location_manager, parent):
+    def __init__(self, donate_action, donate_cpu_action, location_manager, parent):
         QObject.__init__(self, parent)
         self.location_manager = location_manager
 
-        bars = [ToolBar(donate_action, location_manager, parent) for i in range(3)]
+        bars = [ToolBar(donate_action, donate_cpu_action, location_manager, parent) for i in range(3)]
         self.main_bars = tuple(bars[:2])
         self.child_bars = tuple(bars[2:])
         self.reveal_bar = RevealBar(parent)
@@ -664,6 +673,7 @@ class BarsManager(QObject):
         for b in self.bars:
             if b.isVisible() and b.showing_donate:
                 b.donate_button.start_animation()
+                b.donate_cpu_button.start_animation()
                 return True
 
     def init_bars(self):
@@ -715,3 +725,5 @@ class BarsManager(QObject):
             if bar.showing_donate:
                 bar.donate_button.setIconSize(bar.iconSize())
                 bar.donate_button.setToolButtonStyle(style)
+                bar.donate_cpu_button.setIconSize(bar.iconSize())
+                bar.donate_cpu_button.setToolButtonStyle(style)
