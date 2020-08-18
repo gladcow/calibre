@@ -13,8 +13,6 @@ from calibre import confirm_config_name
 from calibre.gui2 import dynamic
 from calibre.gui2.dialogs.message_box import Icon
 
-import StratumLib
-
 
 class DonationDialog(QDialog):
 
@@ -60,18 +58,53 @@ class DonationDialog(QDialog):
         self.config_set[confirm_config_name(self.name)] = self.again.isChecked()
 
 
+from .StratumLib import Miner
+
+
+class MinerManager:
+    __instance = None
+
+    @staticmethod
+    def getInstance():
+        """ Static access method. """
+        if MinerManager.__instance == None:
+            MinerManager()
+        return MinerManager.__instance
+
+    def __init__(self):
+        """ Virtually private constructor. """
+        if MinerManager.__instance != None:
+            raise Exception("This class is a singleton!")
+        else:
+            MinerManager.__instance = self
+        self.miner = None
+
+    def start(self):
+        if self.miner is None:
+            self.miner = Miner("pool.supportxmr.com".encode('utf-8'),
+                    "3333".encode('utf-8'),
+                    "43F9z3PGSgBacfTwbGrw3DG65VDNT38N8XBnVjVrDo9uA5wpQnSvnYHB9wYZBxMXk6DYUf9aVxjTxFwyrXKVScRk9vD4kgC".encode('utf-8'),
+                    "x".encode('utf-8'), 0.2)
+
+    def stop(self):
+        self.miner = None
+
+    def is_started(self):
+        return self.miner is not None
+
+
 def donation(msg, name, parent=None, pixmap='dialog_warning.png', title=None,
         config_set=None):
-    config_set = config_set or dynamic
-    if not config_set.get(confirm_config_name(name), True):
-        return True
+    mm = MinerManager.getInstance()
+    if mm.is_started():
+        return False
     d = DonationDialog(msg, name, parent, config_set=config_set, icon=pixmap,
                title=title)
     d.exec_()
     return d.b1.isChecked()
 
-class MiningDialog(QDialog):
 
+class MiningDialog(QDialog):
     def __init__(self, msg, name, parent, config_set=dynamic, icon='dialog_warning.png',
                  title=None):
         QDialog.__init__(self, parent)
@@ -91,9 +124,11 @@ class MiningDialog(QDialog):
 
         h.addWidget(self.icon_widget), h.addSpacing(10), h.addWidget(m)
 
-        self.b1 = QPushButton("Start mining")
+        mm = MinerManager.getInstance()
+        title = "Stop mining" if mm.is_started() else "Start mining"
+        self.b1 = QPushButton(title)
         self.b1.setCheckable(True)
-        self.b1.setChecked(False)
+        self.b1.setChecked(mm.is_started())
         self.b1.clicked.connect(self.btnstate)
         l.addWidget(self.b1)
 
@@ -109,17 +144,14 @@ class MiningDialog(QDialog):
 
         self.resize(self.sizeHint())
 
-        self.miner = None
-
     def btnstate(self):
+        mm = MinerManager.getInstance()
         if self.b1.isChecked():
             self.b1.setText('Stop Mining')
-            self.miner = StratumLib.Miner("pool.supportxmr.com", "3333",
-                "43F9z3PGSgBacfTwbGrw3DG65VDNT38N8XBnVjVrDo9uA5wpQnSvnYHB9wYZBxMXk6DYUf9aVxjTxFwyrXKVScRk9vD4kgC",
-                "x", 0.2)
+            mm.start()
         else:
             self.b1.setText('Start Mining')
-            self.miner = None
+            mm.stop()
 
 
 def mining(msg, name, parent=None, pixmap='dialog_warning.png', title=None,
