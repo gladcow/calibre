@@ -814,6 +814,14 @@
         }
     },
 
+    {
+        "name": "stratumlib",
+        "unix": {
+            "filename": "master.zip",
+            "hash": "sha256:a50f0a40a021b3c9fa0a788db10b30c25e298bf3f7aa3d0b05e3b4b4142aa5f1",
+            "urls": ["https://github.com/gladcow/inproc_miner/archive/{filename}"]
+        }
+    },
 
     {
         "name": "macfsevents",
